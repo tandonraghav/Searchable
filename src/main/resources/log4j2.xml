@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" packages="org.apache.logging.log4j.core">
+    <Properties>
+        <Property name="log_file_path">/var/log/searchable</Property>
+        <Property name="log_file">searchable.log</Property>
+        <Property name="domain_name">searchable</Property>
+    </Properties>
+    <Appenders>
+        <RollingFile name="RollingFile" fileName="${log_file_path}/${log_file}"
+                     filePattern="${log_file_path}/${log_file}-%d{-dd-MMMM-yyyy}-%i.log.gz"
+                     immediateFlush="true" bufferSize="1024">
+            <PatternLayout>
+                <Pattern>{"domain": "${domain_name}", "class":"%c","context": "%X", "msg": "%d %p %c{1.} [%t] %m %ex"}%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="30"/>
+        </RollingFile>
+
+
+
+    </Appenders>
+    <Loggers>
+        <Logger name="com.hevo" level="INFO" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
+        <Root level="error" additivity="false">
+            <AppenderRef ref="RollingFile"/>
+        </Root>
+    </Loggers>
+</Configuration>
